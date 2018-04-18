@@ -3,7 +3,7 @@ This module contains Sign In and Sign Up features. It also includes Gmail and Fa
 
 Here are the steps to use this in your project:
   1. Import it as a module in your application.
-  2. Add a frameLayout in your activity where you are adding the signIn and signUp features. Framelayout lets you control Fragment with ease.
+  2. Add a FrameLayout with id= "R.id.frameLayout" in your activity where you are adding the signIn and signUp features. Framelayout lets you control Fragment with ease.
   3. In your activity (where you want to add the signIn and signUp features), use FragmentManager to add a fragment. 
      Below is the snippet:
      
