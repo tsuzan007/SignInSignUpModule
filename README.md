@@ -22,7 +22,7 @@ Here are the steps to use this in your project:
             
         b. In build.setting file, add 
         
-                include ':app', ':my-library-module'
+                include ':app', ':SignIn'
               
         c.  Open the app module's build.gradle file and add a new line to the dependencies block as shown in the following                snippet:
         
