@@ -36,13 +36,10 @@ Here are the steps to use this in your project:
      Below is the snippet:
      
         SignInFragment signInFragment=new SignInFragment();
-        
         FragmentManager fragmentManager=getSupportFragmentManager();
-        
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        
+        //R.id.frameLayout is the id of the parent view that holds the fragment
         fragmentTransaction.add(R.id.frameLayout,signInFragment);
-        
         fragmentTransaction.commit();
   
   4. In order to get Firebase Authentication working, register your app in Firebase Console (https://console.firebase.google.com).
