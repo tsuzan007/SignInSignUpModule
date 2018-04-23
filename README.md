@@ -48,4 +48,6 @@ Here are the steps to use this in your project:
   
   4. In order to get Firebase Authentication working, register your app in Firebase Console (https://console.firebase.google.com).
      Go to AppManifest.xml of this module, and use package name to register it.
-  5. Copy google-services.json and paste in inside the module (inside SignIn).
+  5. Copy google-services.json and paste in inside the module (inside SignIn). 
+  
+  Note: when the module is synced with your application, feel free to change package name, dependency library version. Enjoy!!
