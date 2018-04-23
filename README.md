@@ -3,10 +3,13 @@ This module contains Sign In and Sign Up features. It also includes Gmail and Fa
 
 Here are the steps to use this in your project:
   1. Import it as a module in your application.
+  
             Import the library module to your project (the library source becomes part of your project):
             Click File > New > Import Module.
             Enter the location of the library module directory then click Finish.
+            
         a. Go to your project build.gradle file and add classpath 'com.google.gms.google-services:3.2.0'
+        
           buildscript {
             repositories {
               ...
