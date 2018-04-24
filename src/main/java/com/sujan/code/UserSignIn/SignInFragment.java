@@ -1,6 +1,11 @@
 package com.sujan.code.UserSignIn;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +23,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,6 +34,13 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 
 public class SignInFragment extends Fragment implements View.OnClickListener {
@@ -40,6 +56,12 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     private FragmentTransaction fragmentTransaction;
     private SignUpFragment signUpFragment;
     private FirebaseAuth mAuth;
+    private GoogleSignInOptions gso;
+    private CallbackManager callbackManager;
+
+    private static final String EMAIL = "email";
+
+    public static List<String> permission=new ArrayList<String>();
 
 
     @Nullable
@@ -49,7 +71,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         cardView = view.findViewById(R.id.myCardView);
         signIn = view.findViewById(R.id.buttonSignIn);
         signUp = view.findViewById(R.id.buttonSignUp);
-        facebookSignIn = view.findViewById(R.id.facebookSignIn);
+        facebookSignIn =view.findViewById(R.id.facebookSignIn);
         gmailSignIn = view.findViewById(R.id.gmailSignIn);
         username = view.findViewById(R.id.editTextUserName);
         password = view.findViewById(R.id.editTextPassword);
@@ -57,6 +79,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         signIn.setOnClickListener(this);
         facebookSignIn.setOnClickListener(this);
         gmailSignIn.setOnClickListener(this);
+
         return view;
     }
 
@@ -67,6 +90,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         fragmentManager = getActivity().getSupportFragmentManager();
         signUpFragment = new SignUpFragment();
         mAuth = FirebaseAuth.getInstance();
+
+
+
+
 
 
     }
@@ -85,7 +112,40 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
+        String key = getHashKeyForFacebook(getActivity());
+        Log.e("..", key);
+    }
 
+    public String getHashKeyForFacebook(Context context) {
+        PackageInfo packageInfo;
+        String key = null;
+        try {
+            //getting application package name, as defined in manifest
+            String packageName = context.getApplicationContext().getPackageName();
+
+            //Retriving package info
+            packageInfo = context.getPackageManager().getPackageInfo(packageName,
+                    PackageManager.GET_SIGNATURES);
+
+            Log.e("Package Name=", context.getApplicationContext().getPackageName());
+
+            for (Signature signature : packageInfo.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                key = new String(Base64.encode(md.digest(), 0));
+
+                // String key = new String(Base64.encodeBytes(md.digest()));
+                Log.e("Key Hash=", key);
+            }
+        } catch (PackageManager.NameNotFoundException e1) {
+            Log.e("Name not found", e1.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("No such an algorithm", e.toString());
+        } catch (Exception e) {
+            Log.e("Exception", e.toString());
+        }
+
+        return key;
     }
 
     @Override
@@ -120,15 +180,17 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                         });
             } catch (Exception e) {
                 Log.e("...", e.toString());
-                Toast.makeText(getActivity(),"Invalid inputs",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Invalid inputs", Toast.LENGTH_LONG).show();
             }
 
 
-        }else if(v.getId() == R.id.facebookSignIn){
-            Log.e(TAG,"Facebook login clicked");
+        } else if (v.getId() == R.id.facebookSignIn) {
+            Toast.makeText(getActivity(), "Facebook log in is in developing mode.", Toast.LENGTH_SHORT).show();
 
-        }else if(v.getId()==R.id.gmailSignIn){
-            Log.e(TAG,"Gmail log in Clicked");
+
+        } else if (v.getId() == R.id.gmailSignIn) {
+            Toast.makeText(getActivity(), "Gmail log in is in developing mode.", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Gmail log in Clicked");
         }
 
     }
@@ -150,5 +212,12 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         getActivity().finish();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
