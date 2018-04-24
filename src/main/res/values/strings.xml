@@ -5,4 +5,9 @@
     <string name="signin">Sign In</string>
     <string name="signup">Sign Up</string>
     <string name="create_account">Create Account</string>
+    <string name="facebook_app_id">1912348458826256</string>
+    <string name="fb_login_protocol_scheme">fb1912348458826256</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="todo">TODO</string>
+    <string name="or">OR</string>
 </resources>
