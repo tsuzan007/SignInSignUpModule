@@ -70,7 +70,7 @@ Here are the steps to use this in your project:
     @Subscribe
     public void onLogInSuccess(Boolean bool){
         Log.e("...","LogIn Success");
-        Intent intent=new Intent(this,YOUR DESTINATION INTENT);
+        Intent intent=new Intent(this,YOUR DESTINATION ACTIVITY);
         startActivity(intent);
     }
   
