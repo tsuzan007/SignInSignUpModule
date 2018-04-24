@@ -35,19 +35,50 @@ Here are the steps to use this in your project:
   3. In your activity (where you want to add the signIn and signUp features), use FragmentManager to add a fragment. 
      Below is the snippet:
      
+         @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        setContentView(R.layout.activity_log_in);
+        
         SignInFragment signInFragment=new SignInFragment();
-        
+
         FragmentManager fragmentManager=getSupportFragmentManager();
-        
+
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        
+
         //R.id.frameLayout is the id of the parent view that holds the fragment
         fragmentTransaction.add(R.id.frameLayout,signInFragment);
-        
+
         fragmentTransaction.commit();
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onLogInSuccess(Boolean bool){
+        Log.e("...","LogIn Success");
+        Intent intent=new Intent(this,YOUR DESTINATION INTENT);
+        startActivity(intent);
+    }
+  
+ 
   
   4. In order to get Firebase Authentication working, register your app in Firebase Console (https://console.firebase.google.com).
      Go to AppManifest.xml of this module, and use package name to register it.
   5. Copy google-services.json and paste in inside the module (inside SignIn). Double check all your dependencies.
+  
   
   Note: when the module is synced with your application, feel free to change package name, dependency library version. Enjoy!!
